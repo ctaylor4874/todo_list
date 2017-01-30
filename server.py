@@ -4,11 +4,11 @@ import pg
 
 app = Flask(__name__)
 db = pg.DB(
-            host=config.DBHOST,
-            user=config.DBUSER,
-            passwd=config.DBPASS,
-            dbname=config.DBNAME
-            )
+    host=config.DBHOST,
+    user=config.DBUSER,
+    passwd=config.DBPASS,
+    dbname=config.DBNAME
+)
 
 
 @app.route('/')
@@ -28,6 +28,23 @@ def add_task():
     result = db.insert('task', description=description)
     return jsonify(result)
 
+
+@app.route('/mark_task', methods=['POST'])
+def mark_task():
+    task = str(request.form.get('task'))
+    sql = ("update task set done = NOT done WHERE description = $1")
+    result = db.query(sql, task)
+    return jsonify(result)
+
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    del_bool = request.form.get('delete')
+    print del_bool
+    if del_bool:
+        sql = ("delete from task where done = true")
+        result = db.query(sql)
+        return jsonify(result)
 
 if __name__ == '__main__':
     app.secret_key = config.SECRET_KEY
