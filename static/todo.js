@@ -27,7 +27,6 @@ $(function () {
     });
     $('#task-list').on('click', '#done_checkbox', function () {
         console.log($(this));
-        // $(this).siblings('span').css('text-decoration', 'line-through')
         $(this).siblings('span').toggleClass('stroked');
         console.log($(this).siblings('span').html());
         var data = {
